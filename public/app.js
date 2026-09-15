@@ -1,3 +1,6 @@
+// GANTI STRING DI BAWAH DENGAN URL WORKER MAIL.CX KAMU (Contoh: https://mail-cx-worker.username.workers.dev)
+const BACKEND_URL = "https://gurenmail.pages.dev"; 
+
 let currentAddress = "";
 let nextSince = "";
 let refreshTimer = null;
@@ -22,7 +25,9 @@ function setStatus(text) {
 }
 
 async function api(path, options) {
-  const r = await fetch(path, options);
+  // Mengarahkan fetch ke URL Backend Worker
+  const fullUrl = path.startsWith("http") ? path : `${BACKEND_URL}${path}`;
+  const r = await fetch(fullUrl, options);
   if (!r.ok) {
     let msg = `HTTP ${r.status}`;
     try { msg = (await r.json()).error || msg; } catch {}
@@ -39,7 +44,7 @@ async function loadDomains() {
     const name = typeof d === "string" ? d : (d.domain || d.name);
     if (name) domain.add(new Option(name, name));
   }
-  if (!domain.options.length) throw new Error("Mail.cx tidak mengembalikan domain.");
+  if (!domain.options.length) throw new Error("Domain tidak ditemukan.");
   username.value = randomName();
   currentAddress = address();
   setStatus("Siap: " + currentAddress);
