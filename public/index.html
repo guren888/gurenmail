@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Guren TempMail</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <main class="wrap">
+    <section class="card hero">
+      <div class="brand">GUREN <span>TempMail</span></div>
+      <p class="muted">Email sementara berbasis Mail.cx</p>
+
+      <div class="address-box">
+        <input id="username" value="" placeholder="username">
+        <span>@</span>
+        <select id="domain"></select>
+        <button id="copyBtn" title="Salin">📋</button>
+      </div>
+
+      <div class="actions">
+        <button id="newBtn" class="primary">Generate Email</button>
+        <button id="refreshBtn">Refresh Inbox</button>
+        <button id="clearBtn" class="danger">Clear</button>
+      </div>
+      <p id="status" class="status">Memuat domain Mail.cx...</p>
+    </section>
+
+    <section class="card">
+      <div class="section-head">
+        <h2>Inbox</h2>
+        <span id="count">0</span>
+      </div>
+      <div id="inbox" class="inbox empty">Belum ada email.</div>
+    </section>
+  </main>
+
+  <dialog id="mailDialog">
+    <article>
+      <button id="closeDialog" class="close">✕</button>
+      <h2 id="mailSubject">Email</h2>
+      <div class="mail-meta" id="mailMeta"></div>
+      <hr>
+      <iframe id="mailFrame" sandbox="allow-same-origin"></iframe>
+      <pre id="mailText"></pre>
+    </article>
+  </dialog>
+
+  <script src="/app.js"></script>
+</body>
+</html>
