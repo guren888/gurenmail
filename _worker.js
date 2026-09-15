@@ -13,31 +13,38 @@ export default {
     }
 
     try {
-      // Endpoint API Mail.cx
+      // 1. Endpoint Config / Domains (Menyesuaikan mail.cx v1)
       if (url.pathname === "/api/config") {
-        const res = await fetch("https://api.mail.cx/api/v1/auth/domains", {
+        const res = await fetch("https://api.mail.cx/v1/domains", {
           headers: { "Accept": "application/json" }
         });
         const data = await res.json();
-        return new Response(JSON.stringify(data), {
+        return new Response(JSON.stringify({ domains: data }), {
           headers: { ...corsHeaders, "Content-Type": "application/json" }
         });
       }
 
+      // 2. Endpoint Inbox
       if (url.pathname.startsWith("/api/inbox/")) {
         const email = url.pathname.replace("/api/inbox/", "");
-        const res = await fetch(`https://api.mail.cx/api/v1/mailbox/${encodeURIComponent(email)}`, {
-          headers: { "Accept": "application/json" }
-        });
+        const targetUrl = `https://api.mail.cx/v1/inbox/${email}${url.search}`;
+        
+        if (request.method === "DELETE") {
+          const res = await fetch(targetUrl, { method: "DELETE", headers: { "Accept": "application/json" } });
+          return new Response(null, { status: res.status, headers: corsHeaders });
+        }
+
+        const res = await fetch(targetUrl, { headers: { "Accept": "application/json" } });
         const data = await res.json();
-        return new Response(JSON.stringify({ emails: data }), {
+        return new Response(JSON.stringify(data), {
           headers: { ...corsHeaders, "Content-Type": "application/json" }
         });
       }
 
+      // 3. Endpoint Baca Email
       if (url.pathname.startsWith("/api/email/")) {
         const id = url.pathname.replace("/api/email/", "");
-        const res = await fetch(`https://api.mail.cx/api/v1/mailbox/message/${encodeURIComponent(id)}`, {
+        const res = await fetch(`https://api.mail.cx/v1/email/${id}`, {
           headers: { "Accept": "application/json" }
         });
         const data = await res.json();
@@ -46,7 +53,6 @@ export default {
         });
       }
 
-      // Jika bukan route API, biarkan Cloudflare Pages memuat file statis (HTML/JS)
       return env.ASSETS.fetch(request);
     } catch (err) {
       return new Response(JSON.stringify({ error: err.message }), {
