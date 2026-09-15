@@ -37,3 +37,5 @@ Setelah Worker aktif, tambahkan custom domain:
 Mail.cx menggunakan alamat mailbox secara implicit. Tidak ada endpoint "create mailbox" terpisah pada API; alamat mulai menerima mail ketika SMTP gateway Mail.cx menerima pesan untuk alamat tersebut.
 
 API Mail.cx mendukung inbox, email lengkap, raw `.eml`, SSE, dan custom domain.
+
+...
